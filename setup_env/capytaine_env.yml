@@ -1,0 +1,11 @@
+name: capytaine
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - wecopttool
+  - gmsh
+  - python-gmsh
+  - meshio
+  - spyder-kernels
