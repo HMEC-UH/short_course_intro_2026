@@ -1,0 +1,7 @@
+name: spyder_gui
+channels:
+  - https://repo.anaconda.com/pkgs/main
+  - https://repo.anaconda.com/pkgs/r
+dependencies:
+  - spyder
+prefix: /home/troy/miniconda3/envs/spyder_gui

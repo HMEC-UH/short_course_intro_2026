@@ -1,0 +1,17 @@
+site_name: Intro to Marine Energy
+docs_dir: src
+
+nav:
+  - Home: index.md
+  - Environment: environment.md
+  - Mesh: mesh.md
+  - Capytaine: capytaine.md
+  - BEMIO: bemio.md
+  - WEC-Sim: wecsim.md
+
+theme: readthedocs
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details # Optional: for collapsible blocks
+  - pymdownx.superfences # Optional: for code blocks inside admonitions
