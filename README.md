@@ -1,4 +1,4 @@
-# short_course_intro_2026
-Collection of resources for summer 2026 "Intro to Marine Energy" short course held at UH Manoa.
+# Intro to Marine Energy
+Collection of resources for "Intro to Marine Energy" short course to be held at UH Manoa summer 2026.
 
-Head over to the [documentation](https://hmec-uh.github.io/short_course_intro_2026/) and follow along.
+Course [documentation](https://hmec-uh.github.io/short_course_intro_2026/) is provided.
