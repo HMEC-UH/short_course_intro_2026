@@ -12,7 +12,7 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Home";
+        var mkdocs_page_name = "Welcome";
         var mkdocs_page_input_path = "index.md";
         var mkdocs_page_url = null;
       </script>
@@ -40,34 +40,32 @@
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="#">Home</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#commands">Commands</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#project-layout">Project layout</a>
-    </li>
-    </ul>
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Welcome</a>
                 </li>
               </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="environment/">Environment</a>
-                </li>
+                  <li class="toctree-l1"><a class="reference internal" href="environment/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="environment/python/">Python Setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="environment/matlab/">MATLAB Setup</a>
+                  </li>
               </ul>
+              <p class="caption"><span class="caption-text">Mesh Generation</span></p>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="mesh/">Mesh</a>
-                </li>
+                  <li class="toctree-l1"><a class="reference internal" href="mesh/gmsh/">Gmsh</a>
+                  </li>
               </ul>
+              <p class="caption"><span class="caption-text">Hydrodynamic Coefficients</span></p>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="capytaine/">Capytaine</a>
-                </li>
+                  <li class="toctree-l1"><a class="reference internal" href="coeffs/capytaine/">Capytaine</a>
+                  </li>
               </ul>
+              <p class="caption"><span class="caption-text">Multibody</span></p>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="bemio/">BEMIO</a>
-                </li>
-              </ul>
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="wecsim/">WEC-Sim</a>
-                </li>
+                  <li class="toctree-l1"><a class="reference internal" href="dynamics/wecsim/">WEC-Sim</a>
+                  </li>
               </ul>
       </div>
     </div>
@@ -83,7 +81,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Home</li>
+      <li class="breadcrumb-item active">Welcome</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -92,26 +90,19 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="welcome-to-mkdocs">Welcome to MkDocs</h1>
-<p>For full documentation visit <a href="https://www.mkdocs.org">mkdocs.org</a>.</p>
-<h2 id="commands">Commands</h2>
+                <p>There are three primary tools used to numerically evaluate a wave energy converter (WEC):</p>
 <ul>
-<li><code>mkdocs new [dir-name]</code> - Create a new project.</li>
-<li><code>mkdocs serve</code> - Start the live-reloading docs server.</li>
-<li><code>mkdocs build</code> - Build the documentation site.</li>
-<li><code>mkdocs -h</code> - Print help message and exit.</li>
+<li>Mesh generator (e.g., <a href="https://gmsh.info/">Gmsh</a>)</li>
+<li>Solver for hydrodynamic coefficients (e.g., <a href="https://capytaine.org/stable/">Capytaine</a>)</li>
+<li>Multibody simulation environment for 3D mechanical systems (e.g., <a href="https://wec-sim.github.io/WEC-Sim/main/index.html">WEC-Sim</a>)</li>
 </ul>
-<h2 id="project-layout">Project layout</h2>
-<pre><code>mkdocs.yml    # The configuration file.
-docs/
-    index.md  # The documentation homepage.
-    ...       # Other markdown pages, images and other files.
-</code></pre>
+<p>The links in parentheses correspond to the tools primarily used at HMEC. While other tools are available, the framework above is widely used in the university-level wave energy community due to the open-source availability of these packages and the broad accessibility of MATLAB for researchers.</p>
+<p>The first two software packages are fully open source and can be used entirely within a Python-based workflow. The third, however, is better described as an open-source toolbox built around MATLAB. While the toolbox itself is openly available, running simulations still requires a licensed MATLAB installation.</p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="environment/" class="btn btn-neutral float-right" title="Environment">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="environment/" class="btn btn-neutral float-right" title="Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -155,5 +146,5 @@ docs/
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2026-05-08 02:46:58.527387+00:00
+Build Date UTC : 2026-05-14 06:55:42.898675+00:00
 -->

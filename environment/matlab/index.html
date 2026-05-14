@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>MATLAB Setup - Intro to Marine Energy</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "MATLAB Setup";
+        var mkdocs_page_input_path = "environment/matlab.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Intro to Marine Energy
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Welcome</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../python/">Python Setup</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">MATLAB Setup</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#wec-sim">WEC-Sim</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#test-installation">Test Installation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#linking-python-optional">Linking Python (optional)</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Mesh Generation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../mesh/gmsh/">Gmsh</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Hydrodynamic Coefficients</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../coeffs/capytaine/">Capytaine</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Multibody</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../dynamics/wecsim/">WEC-Sim</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Intro to Marine Energy</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Getting Started</li>
+      <li class="breadcrumb-item active">MATLAB Setup</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <p>The goal of the instructions below is to get WEC-Sim up and running within MATLAB. The material provided here is intended to complement the official <a href="https://wec-sim.github.io/WEC-Sim/main/user/getting_started.html">WEC-Sim documentation</a> by offering additional explanation, alternative approaches, and beginner-oriented insights that may help clarify the setup process. If you encounter any issues during installation or configuration, please refer to the official WEC-Sim documentation as the primary reference. If you are still stuck or have questions, do not hesitate to reach out for assistance.</p>
+<h1 id="matlab">MATLAB</h1>
+<p><a href="https://www.mathworks.com/">MATLAB</a> is a numerical computing environment built around a core programming language and a collection of specialized toolboxes. Different engineering workflows often require different toolboxes depending on the type of analysis, modeling, or simulation being performed.</p>
+<p>Throughout this course, MATLAB will primarily be used for simulation, data analysis, and marine energy engineering workflows. Course activities will follow the setup and software requirements established by the <a href="https://wec-sim.github.io/WEC-Sim/main/user/getting_started.html">WEC-Sim documentation</a>, which serves as one of the primary modeling frameworks used in the course.</p>
+<p>Course participants should <strong>install MATLAB Version 9.9 (R2020b) or newer</strong> to ensure compatibility with WEC-Sim and associated toolboxes. In addition to the core MATLAB installation, the following toolboxes are required:</p>
+<table>
+<thead>
+<tr>
+<th>Toolbox</th>
+<th>Minimum Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Simulink</td>
+<td>Version 10.2 (R2020b)</td>
+</tr>
+<tr>
+<td>Simscape</td>
+<td>Version 5.0 (R2020b)</td>
+</tr>
+<tr>
+<td>Simscape Multibody</td>
+<td>Version 7.2 (R2020b)</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">MATLAB for Students</p>
+<p>MATLAB offers an annual <a href="https://www.mathworks.com/store/link/products/student/STUDENT?s_tid=ac_buy_sv_but1">student license</a> for about $150 (after adding "Simscape Multibody")</p>
+</div>
+<p>MATLAB provides a dedicated <em>installation executable</em> that guides users through the setup process, including account authentication, license selection, installation location, and toolbox selection. Overall, the installation process is fairly straightforward.</p>
+<p>After completing the installation, start MATLAB and enter the following command into the "Command Window" (then press enter):</p>
+<pre><code>ver
+</code></pre>
+<p>It should output a list containing the installed version of MATLAB and toolboxes. Below is an example following installation with the minimum requirements:</p>
+<pre><code>&gt;&gt; ver
+-----------------------------------------------------------------------------------------------------------------
+MATLAB                                                Version 24.2        (R2024b)
+Simulink                                              Version 24.2        (R2024b)
+Simscape                                              Version 24.2        (R2024b)
+Simscape Multibody                                    Version 24.2        (R2024b)
+</code></pre>
+<p>You have now successfully installed MATLAB and the required toolboxes for this course.</p>
+<h2 id="wec-sim">WEC-Sim</h2>
+<p>WEC-Sim is maintained as a <a href="https://github.com/WEC-Sim/wec-sim">GitHub repository</a>, similar to how these course materials are distributed. The official <a href="https://wec-sim.github.io/WEC-Sim/main/user/getting_started.html#download-wec-sim">WEC-Sim documentation</a> typically recommends installation using “<a href="https://git-scm.com/">git</a>”, which is a version control tool commonly used to interact with GitHub repositories.</p>
+<p>Using <span class="keys"><kbd>git</kbd></span> allows users to directly “clone” repositories to their computer, track version history, receive updates, contribute changes, and synchronize local files with the latest development version of a project. In research and software development environments, <span class="keys"><kbd>git</kbd></span> is widely used because it provides a structured and reproducible way to manage evolving codebases and collaborate across teams.</p>
+<p>For this course, however, we will use a simpler <strong>static installation</strong> method by downloading the latest WEC-Sim release as a ZIP archive. <a href="#wecsim-zip">Figure 1</a> below shows how to find and download the ZIP archive from the <a href="https://github.com/WEC-Sim/wec-sim">WEC-Sim repository</a>. This approach avoids the need to install and learn <span class="keys"><kbd>git</kbd></span> while still providing access to the required software and examples used throughout the course.</p>
+<p><img alt="WECSim zip" id="wecsim-zip" src="../assets/images/wec_sim_download.png" /></p>
+<p><em>Figure 1: Download WEC-Sim ZIP archive.</em></p>
+<div class="admonition note">
+<p class="admonition-title">WEC-Sim Software</p>
+<p>You will notice that WEC-Sim is essentially just a directory/folder containing MATLAB scripts, functions, examples, and supporting files. Unlike traditional applications, there is no separate <em>installation executable</em>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note on Language</p>
+<p>I'll use the words "folder" and "directory" interchangeably herein.</p>
+</div>
+<p>To use WEC-Sim, <strong>MATLAB simply needs to know where the files are located</strong> so they can be accessed and executed within the MATLAB environment. This is done by adding the installation directory to MATLAB's working <span class="keys"><kbd>path</kbd></span>. The official <a href="https://wec-sim.github.io/WEC-Sim/main/user/getting_started.html#install-wec-sim">WEC-Sim documentation</a> gives instructions on how to automate this step by utilizing MATLAB's <code>startup.m</code> script, which is nothing more than a script that runs when you first start MATLAB. We'll highlight the main points below and let you decide if you want to automate the process.</p>
+<p>After downloading the ZIP file — and extracting/unzipping the contents — you can move the parent WEC-Sim folder to wherever you like! It doesn't matter where you keep it, you just need to know where it is located (i.e., the <span class="keys"><kbd>path</kbd></span>). Expand the dropdowns below for your operating system to see a few examples:</p>
+<details>
+<summary>Windows</summary>
+<table>
+<thead>
+<tr>
+<th>Storage Location</th>
+<th>Example Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Downloads</td>
+<td>C:\Users\troy\Downloads\WEC-Sim-main</td>
+</tr>
+<tr>
+<td>Documents</td>
+<td>C:\Users\troy\Documents\WEC-Sim-main</td>
+</tr>
+</tbody>
+</table>
+</details>
+<details>
+<summary>Linux</summary>
+<table>
+<thead>
+<tr>
+<th>Storage Location</th>
+<th>Example Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Downloads</td>
+<td>/home/troy/Downloads/WEC-Sim-main</td>
+</tr>
+<tr>
+<td>Documents</td>
+<td>/home/troy/Documents/WEC-Sim-main</td>
+</tr>
+</tbody>
+</table>
+</details>
+<details>
+<summary>Mac</summary>
+<table>
+<thead>
+<tr>
+<th>Storage Location</th>
+<th>Example Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Downloads</td>
+<td>/Users/troy/Downloads/WEC-Sim-main</td>
+</tr>
+<tr>
+<td>Documents</td>
+<td>/Users/troy/Documents/WEC-Sim-main</td>
+</tr>
+</tbody>
+</table>
+</details>
+<p><br>
+The <span class="keys"><kbd>path</kbd></span> structure is unique to your file system and username. It's basically an "address". If you rename the "WEC-Sim-main" parent directory to something else (e.g., "WECSim_version_6"), then your <span class="keys"><kbd>path</kbd></span> will change. Also, in the examples above, I've used "troy" as the username. <strong>On your computer, the <span class="keys"><kbd>path</kbd></span> will be different!</strong></p>
+<div class="admonition warning">
+<p class="admonition-title">Check Point</p>
+<p>Make sure you understand what a <span class="keys"><kbd>path</kbd></span> is and how to identify <strong>your</strong> WEC-Sim directory <span class="keys"><kbd>path</kbd></span>. This is often a cause for confusion with beginners.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Absolute vs Relative path</p>
+<p>An <strong>absolute</strong> <span class="keys"><kbd>path</kbd></span> is the <strong>full</strong> location (e.g., <code>C:\Users\troy\Downloads\WEC-Sim-main</code>), whereas the <strong>relative</strong> <span class="keys"><kbd>path</kbd></span> is with respect to your <strong>current location</strong> — which we'll call your <span class="keys"><kbd>working directory</kbd></span>. </p>
+<p>For example, suppose your <strong>working directory</strong> is: <code>C:\Users\troy</code>. Then the relative path to the "WEC-Sim-main" directory — in the example above — would be <code>.\Downloads\WEC-Sim-main</code>, where the <code>.\</code> means "current location". There's also a <code>..\</code> notation, which means "one directory up", and this can be chained like <code>..\..\</code> etc., to navigate further up the directory tree. Search "absolute vs relative path" online if you need further explanation.</p>
+</div>
+<p><img alt="WECSim zip" id="matlab_main" src="../assets/images/matlab_main.png" /></p>
+<p><em>Figure 2: Header of the main MATLAB application window (version 2024b).</em></p>
+<p>There are a couple of different ways to include the WEC-Sim <span class="keys"><kbd>path</kbd></span> in MATLAB. The official <a href="https://wec-sim.github.io/WEC-Sim/main/user/getting_started.html#install-wec-sim">WEC-Sim documentation</a> has you do this in the <code>startup.m</code> script. However, this can technically be done in any script. When you first start MATLAB, as shown in <a href="#matlab_main">Figure 2</a>, you see in the top left a button to create a "New Script". We can add the following lines of code to the script:</p>
+<pre><code>wecsim_path = 'C:\Users\troy\Downloads\WEC-Sim-main\source';
+addpath(genpath(wecsim_path));
+</code></pre>
+<p>Pressing "run" in the MATLAB header will ask to save, then run this script. NOTE: for now, you'll want to save to the default <span class="keys"><kbd>working directory</kbd></span>...more on this in the next section. The code above first assigns a string of charters — in this case, your <strong>absolute</strong> <span class="keys"><kbd>path</kbd></span> — to the variable <code>wecsim_path</code>. The last line will then add the path, and all its nested paths with the inclusion of <code>genpath</code>, to MATLAB's list of known working paths. Basically, it tells MATLAB that this is a valid place to look for additional scripts, functions, libraries, etc. </p>
+<div class="admonition warning">
+<p class="admonition-title">Point to "source" path</p>
+<p>In the code above, the <span class="keys"><kbd>path</kbd></span> is <code>C:\Users\troy\Downloads\WEC-Sim-main\source</code>. The inclusion of <code>source</code> at the end is not a mistake. If you look at the "WEC-Sim-main" directory structure, you'll find other things that ship with WEC-Sim, such as examples, tutorials, etc. You don't want to include those in your path, as those are not part of the <strong>source code</strong>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Set Path Graphically</p>
+<p>I mentioned there are a couple of different ways to include the WEC-Sim <span class="keys"><kbd>path</kbd></span> in MATLAB. In <a href="#matlab_main">Figure 2</a>, I pointed at a button in the MATLAB header, on the right, that reads "Set Path" (it might be hidden under a dropdown menu). If you click this, it will open a dialog showing MATLAB's known working paths. Clicking <span class="keys"><kbd>Add with Subfolders...</kbd></span> will open another dialog, in which you'd want to select <code>C:\Users\troy\Downloads\WEC-Sim-main\source</code> to achieve the same programmatic result as <code>addpath(genpath(wecsim_path));</code> above.</p>
+</div>
+<p>Congratulations! You're now ready to run WEC-Sim.</p>
+<p>If you want to check, you can type <code>path</code> in MATLAB's "Command Window" (like we did with <code>ver</code> earlier), hit enter, and you should find the path to the WEC-Sim source code in the print out.</p>
+<h2 id="test-installation">Test Installation</h2>
+<p>In <a href="#matlab_main">Figure 2</a>, you'll also see the <span class="keys"><kbd>path</kbd></span> of MATLAB's current <span class="keys"><kbd>working directory</kbd></span>. Anything in this directory is part of MATLAB's working <span class="keys"><kbd>path</kbd></span> by default. All scripts, functions, etc. are included and you do not need to add this path. However, if there subfolders needed in the working directory, then you would want to add those to your <span class="keys"><kbd>path</kbd></span>.</p>
+<p>Change your current working directory to one of the WEC-Sim <span class="keys"><kbd>examples</kbd></span> directories (e.g., <code>C:\Users\troy\Downloads\WEC-Sim-main\examples\RM3</code>). If you set your <span class="keys"><kbd>path</kbd></span> correctly in the previous section, then you should be able to run the example by typing the following in the "Command Window" (then press enter):</p>
+<pre><code>wecSim
+</code></pre>
+<p>If everything is setup correctly, the example should execute.</p>
+<p>The command <code>wecSim</code> is the name of a file that serves as the main entry point to WEC-Sim. It lives in the source code, which is now included in our path. Thus, MATLAB knows what to do when you execute the command. We could include this command, along with some comments, in our previous example script:</p>
+<pre><code>% Identify the WEC-Sim source code directory then add to MATLAB's path
+wecsim_path = 'C:\Users\troy\Downloads\WEC-Sim-main\source';
+addpath(genpath(wecsim_path));
+
+% Run WEC-Sim in the current working directory
+wecSim
+</code></pre>
+<p>You can easily extend this foundational structure to build more advanced MATLAB workflows and automation scripts. For example, additional code could be added before running <code>wecSim</code> to modify simulation parameters, configure model settings, or organize input data. Similarly, post-processing code could automatically generate plots, analyze results, export data, move files, or create reports after the simulation completes. WEC-Sim does include some of these features in its code base, but we won't cover those here. The point is, this scripting-based workflow is one of MATLAB’s major strengths and is widely used in research and engineering environments to improve reproducibility, reduce repetitive manual work, and streamline larger computational studies.</p>
+<h2 id="linking-python-optional">Linking Python (optional)</h2>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../python/" class="btn btn-neutral float-left" title="Python Setup"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../mesh/gmsh/" class="btn btn-neutral float-right" title="Gmsh">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../python/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../mesh/gmsh/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

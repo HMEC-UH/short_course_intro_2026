@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Environment - Intro to Marine Energy</title>
+    <title>Overview - Intro to Marine Energy</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Environment";
-        var mkdocs_page_input_path = "environment.md";
+        var mkdocs_page_name = "Overview";
+        var mkdocs_page_input_path = "environment/index.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -40,36 +40,34 @@
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                <li class="toctree-l1"><a class="reference internal" href="..">Welcome</a>
                 </li>
               </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
               <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="#">Environment</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Overview</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#python">Python</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#conda">Conda</a>
-    </li>
-        </ul>
-    </li>
     </ul>
-                </li>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="python/">Python Setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="matlab/">MATLAB Setup</a>
+                  </li>
               </ul>
+              <p class="caption"><span class="caption-text">Mesh Generation</span></p>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../mesh/">Mesh</a>
-                </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../mesh/gmsh/">Gmsh</a>
+                  </li>
               </ul>
+              <p class="caption"><span class="caption-text">Hydrodynamic Coefficients</span></p>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../capytaine/">Capytaine</a>
-                </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../coeffs/capytaine/">Capytaine</a>
+                  </li>
               </ul>
+              <p class="caption"><span class="caption-text">Multibody</span></p>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../bemio/">BEMIO</a>
-                </li>
-              </ul>
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../wecsim/">WEC-Sim</a>
-                </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../dynamics/wecsim/">WEC-Sim</a>
+                  </li>
               </ul>
       </div>
     </div>
@@ -85,7 +83,8 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Environment</li>
+          <li class="breadcrumb-item">Getting Started</li>
+      <li class="breadcrumb-item active">Overview</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -94,35 +93,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="setup-your-environment">Setup Your Environment</h1>
-<p>There are three primary tools used to numerically evaluate a wave energy converter:</p>
-<ul>
-<li>Mesh generator (e.g., <a href="https://gmsh.info/">Gmsh</a>)</li>
-<li>Solver for hydrodynamic coefficients (e.g., <a href="https://capytaine.org/stable/">Capytaine</a>)</li>
-<li>Multibody simulation environment for 3D mechanical systems (e.g., <a href="https://wec-sim.github.io/WEC-Sim/main/index.html">WEC-Sim</a>)</li>
-</ul>
-<p>The links in parentheses correspond to the tools primarily used at HMEC. While other tools are available, the framework above is widely used in the university-level wave energy community due to the open-source availability of these packages and the broad accessibility of MATLAB for researchers.</p>
-<p>The first two software packages are fully open source and can be used entirely within a Python-based workflow. The third, however, is better described as an open-source toolbox built around MATLAB. While the toolbox itself is openly available, running simulations still requires a licensed MATLAB installation.</p>
-<h2 id="python">Python</h2>
-<p>Python is often included as part of the operating system environment, particularly on Linux systems. Regardless of the platform, it is good practice to create isolated Python <strong>virtual environments</strong> for project work rather than using the system-wide installation directly. This helps avoid dependency conflicts and prevents accidental changes to OS-level utilities or packages that may rely on the system Python installation.</p>
-<div class="admonition warning">
-<p class="admonition-title">Virtual Environments</p>
-<p>Working in a virtual environment avoids dependency conflicts and prevents accidental changes to OS-level utilities</p>
+                <h1 id="overview">Overview</h1>
+<p>In many introductory courses, software installation is treated as a simple process: download a program, install it, and begin working. While this approach works for standalone applications, scientific computing and engineering workflows are often more complex. Modern technical projects rely on collections of libraries, toolboxes, and dependencies that evolve over time and may require different versions to function correctly. As projects grow, managing these dependencies becomes increasingly important.</p>
+<div class="admonition note">
+<p class="admonition-title">Virtual Environment</p>
+<p>A <strong>virtual environment</strong> is an isolated software workspace that contains its own Python interpreter, packages, and configuration settings.</p>
 </div>
-<h3 id="conda">Conda</h3>
-<p>Managing Python dependencies manually is generally impractical for computing workflows. Fortunately, several package managers are available to simplify environment and dependency management. At HMEC, the primary package manager used is "Conda", which is distributed through several interfaces and installations, including:</p>
+<p>Rather than installing every library globally on a computer, virtual environments allow each project to maintain its own controlled software ecosystem. This prevents conflicts between package versions, improves reproducibility, and makes it easier to share projects with collaborators.</p>
+<p>For example, one project may require an older version of a numerical library while another project depends on the newest release. Without virtual environments, installing one version may unintentionally break the other project. By separating environments, each project can operate independently without interfering with the rest of the system.</p>
+<p>Virtual environments are now standard practice in scientific computing, data science, machine learning, and engineering research. They support:</p>
 <ul>
-<li>Anaconda — a full scientific Python distribution that includes Conda along with many pre-installed packages and graphical tools (large installation)</li>
-<li>Miniconda — a lightweight Conda installer that provides only the core package and environment manager</li>
-<li>Miniforge — a community-maintained Conda distribution that emphasizes open-source packages and the conda-forge ecosystem</li>
+<li>Reproducibility — ensuring code behaves consistently across different computers</li>
+<li>Dependency management — controlling which libraries and versions are installed</li>
+<li>Project isolation — preventing conflicts between unrelated projects</li>
+<li>Collaboration — allowing teams to share standardized software setups</li>
+<li>Long-term maintainability — preserving working environments for future use</li>
 </ul>
-<p>For most users in this course, Miniconda or Miniforge will be sufficient and are generally preferred due to their smaller installation size and greater flexibility.</p>
+<p>Throughout this course, Python environments will be managed using Miniconda, which provides tools for creating and maintaining isolated environments with minimal setup overhead. MATLAB, while distributed as a standalone application, also benefits from structured environment management through toolboxes, path organization, and version control practices.</p>
+<p>Although virtual environments may initially seem more complicated than simply installing software directly, they are an essential professional workflow used throughout modern technical computing. Learning these practices early will make future projects substantially easier to manage, reproduce, and scale.</p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href=".." class="btn btn-neutral float-left" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../mesh/" class="btn btn-neutral float-right" title="Mesh">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href=".." class="btn btn-neutral float-left" title="Welcome"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="python/" class="btn btn-neutral float-right" title="Python Setup">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -148,7 +142,7 @@
       <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../mesh/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="python/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
