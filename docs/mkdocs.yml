@@ -2,16 +2,27 @@ site_name: Intro to Marine Energy
 docs_dir: src
 
 nav:
-  - Home: index.md
-  - Environment: environment.md
-  - Mesh: mesh.md
-  - Capytaine: capytaine.md
-  - BEMIO: bemio.md
-  - WEC-Sim: wecsim.md
+  - Welcome: index.md
+  - Getting Started:
+    - Overview: environment/index.md
+    - Python Setup: environment/python.md
+    - MATLAB Setup: environment/matlab.md
+  - Mesh Generation:
+    - Gmsh: mesh/gmsh.md
+  - Hydrodynamic Coefficients:
+    - Capytaine: coeffs/capytaine.md
+  - Multibody:
+    - WEC-Sim: dynamics/wecsim.md
 
-theme: readthedocs
+theme:
+  name: readthedocs
+  collapse_navigation: true
+  navigation_depth: 4
 
 markdown_extensions:
+  - attr_list
+  - md_in_html
   - admonition
   - pymdownx.details # Optional: for collapsible blocks
   - pymdownx.superfences # Optional: for code blocks inside admonitions
+  - pymdownx.keys

@@ -1,17 +1,9 @@
-# Welcome to MkDocs
+There are three primary tools used to numerically evaluate a wave energy converter (WEC):
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+* Mesh generator (e.g., [Gmsh](https://gmsh.info/))
+* Solver for hydrodynamic coefficients (e.g., [Capytaine](https://capytaine.org/stable/))
+* Multibody simulation environment for 3D mechanical systems (e.g., [WEC-Sim](https://wec-sim.github.io/WEC-Sim/main/index.html))
 
-## Commands
+The links in parentheses correspond to the tools primarily used at HMEC. While other tools are available, the framework above is widely used in the university-level wave energy community due to the open-source availability of these packages and the broad accessibility of MATLAB for researchers.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
-
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+The first two software packages are fully open source and can be used entirely within a Python-based workflow. The third, however, is better described as an open-source toolbox built around MATLAB. While the toolbox itself is openly available, running simulations still requires a licensed MATLAB installation.
