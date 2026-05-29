@@ -1,5 +1,7 @@
 site_name: Intro to Marine Energy
 docs_dir: src
+repo_name: Intro to Marine Energy
+repo_url: https://github.com/HMEC-UH/short_course_intro_2026
 
 nav:
   - Welcome: index.md
@@ -8,6 +10,7 @@ nav:
     - Python Setup: environment/python.md
     - MATLAB Setup: environment/matlab.md
   - Mesh Generation:
+    - Overview: mesh/index.md
     - Gmsh: mesh/gmsh.md
   - Hydrodynamic Coefficients:
     - Capytaine: coeffs/capytaine.md
@@ -15,9 +18,10 @@ nav:
     - WEC-Sim: dynamics/wecsim.md
 
 theme:
-  name: readthedocs
-  collapse_navigation: true
-  navigation_depth: 4
+  name: material
+  features:
+    - navigation.tracking  # Updates URL bar dynamically as you scroll
+    - navigation.indexes   # Allows folder titles to be clickable pages
 
 markdown_extensions:
   - attr_list
@@ -26,3 +30,9 @@ markdown_extensions:
   - pymdownx.details # Optional: for collapsible blocks
   - pymdownx.superfences # Optional: for code blocks inside admonitions
   - pymdownx.keys
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+
+extra_css:
+  - stylesheets/alignments.css
