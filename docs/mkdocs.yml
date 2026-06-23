@@ -5,10 +5,6 @@ repo_url: https://github.com/HMEC-UH/short_course_intro_2026
 
 nav:
   - Welcome: index.md
-  - Getting Started:
-    - Overview: environment/index.md
-    - Python Setup: environment/python.md
-    - MATLAB Setup: environment/matlab.md
   - Mesh Generation:
     - Overview: mesh/index.md
     - Gmsh: mesh/gmsh.md
