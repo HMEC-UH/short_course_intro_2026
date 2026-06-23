@@ -19,6 +19,12 @@ nav:
 
 theme:
   name: material
+  logo: assets/images/white_64.png
+  favicon: assets/images/green_64.png
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - scheme: HMEC
   features:
     - navigation.tracking  # Updates URL bar dynamically as you scroll
     - navigation.indexes   # Allows folder titles to be clickable pages
@@ -36,3 +42,11 @@ markdown_extensions:
 
 extra_css:
   - stylesheets/alignments.css
+  - stylesheets/color_scheme.css
+
+plugins:
+  - search
+  - privacy:
+      links_attr_map:
+        target: _blank
+        rel: noopener noreferrer
