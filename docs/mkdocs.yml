@@ -6,12 +6,12 @@ repo_url: https://github.com/HMEC-UH/short_course_intro_2026
 nav:
   - Welcome: index.md
   - Mesh Generation:
-    - Overview: mesh/index.md
-    - Gmsh: mesh/gmsh.md
+    - Overview: gmsh/index.md
+    - Gmsh: gmsh/gmsh.md
   - Hydrodynamic Coefficients:
-    - Capytaine: coeffs/capytaine.md
+    - Capytaine: capytaine/capytaine.md
   - Multibody:
-    - WEC-Sim: dynamics/wecsim.md
+    - WEC-Sim: wecsim/wecsim.md
 
 theme:
   name: material
