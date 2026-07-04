@@ -1,10 +1,10 @@
 The goal of the instructions below is to introduce practical mesh generation workflows in Gmsh for hydrodynamic analysis with Capytaine using the Gmsh Python API. Rather than reproducing the full Gmsh user manual, this section focuses on the concepts and workflows most relevant to marine energy applications, including creation of simple parametric meshes that can be integrated directly into Python-based simulation workflows, as well as construction of basic non-parametric geometries entirely from code. The objective is to develop a practical foundation for building and modifying computational meshes while developing intuition for how geometry discretization influences numerical hydrodynamic models.
 
-# Gmesh
+# Gmsh
 In this course, we will use a dedicated Conda environment named ++"capytaine"++ to manage the Python packages required for Capytaine and Gmsh. Using an isolated environment helps avoid conflicts between package versions and keeps the numerical modeling workflow self-contained and reproducible.
 
 !!! warning "Is Conda Installed?"
-    If Conda has not yet been installed, refer to the earlier [Miniconda setup](../environment/python.md#miniconda) instructions before proceeding.
+    If Conda has not yet been installed, refer to the earlier [Miniconda setup](https://hmec-uh.github.io/work_environments/python/conda/) instructions before proceeding.
 
 !!! note "Conda ++"channel"++"
     After entering Conda commands, you will be prompted with a yes/no to proceed. Herein, I'm going to assume you say "yes" and everything goes smoothly — fingers crossed!
@@ -34,7 +34,7 @@ Gmsh should now be installed!
 
 Gmsh includes a Python [Application Programming Interface (API)](https://gmsh.info/doc/texinfo/gmsh.html#Gmsh-application-programming-interface), which allows geometry creation, mesh generation, refinement, and export operations to be performed directly from Python code. In this course, we will primarily interact with Gmsh through this API rather than through the graphical user interface. This approach allows mesh generation to become part of larger computational workflows that can be automated, parameterized, and integrated directly with Capytaine simulations.
 
-The [Spyder IDE](../environment/python.md#spyder-ide) was introduced previously in the Python setup instructions. To allow Spyder to interface with our ++"capytaine"++ environment, we first need to install the appropriate communication kernels inside the ++"capytaine"++ environment:
+The [Spyder IDE](https://hmec-uh.github.io/work_environments/python/spyder_ide/) was introduced previously in the Python setup instructions. To allow Spyder to interface with our ++"capytaine"++ environment, we first need to install the appropriate communication kernels inside the ++"capytaine"++ environment:
 
     conda install spyder-kernels
 

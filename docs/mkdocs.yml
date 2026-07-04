@@ -9,8 +9,10 @@ nav:
     - Overview: Gmsh/index.md
     - Gmsh: Gmsh/gmsh.md
   - Hydrodynamic Coefficients:
+    - Overview: Capytaine/index.md
     - Capytaine: Capytaine/capytaine.md
   - Multibody:
+    - Overview: WECSim/index.md
     - WEC-Sim: WECSim/wecsim.md
 
 theme:

@@ -7,6 +7,7 @@ Created on Thu May 28 10:09:44 2026
 """
 
 import gmsh
+from local_refinement import get_edge_curves, get_threshold_field
 
 # ------------------------------------------------------------
 # 1. Initialize Gmsh
@@ -17,7 +18,7 @@ gmsh.initialize()
 
 # Give the model a name. This is useful when working with
 # multiple geometries or when inspecting output files.
-gmsh.model.add("spar_buoy")
+gmsh.model.add("spar_buoy_refined")
 
 # ------------------------------------------------------------
 # 2. Define cylinder parameters
@@ -72,16 +73,54 @@ cylinder = gmsh.model.occ.addCylinder(
 gmsh.model.occ.synchronize()
 
 # ------------------------------------------------------------
-# 5. Set mesh size
+# 5. Identify reference curves for local refinement
 # ------------------------------------------------------------
-# This controls the approximate size of mesh elements.
-# Smaller values create a finer mesh; larger values create
-# a coarser mesh.
+# To define a local mesh refinement region, we first identify the
+# outer circular curves of the heave plate. These curves will be
+# used as the reference geometry for a distance-based mesh field.
 
-mesh_size = 0.03
+spar_edge_curves = get_edge_curves(gmsh, spar_radius, 0, spar_height-0)
 
-gmsh.option.setNumber("Mesh.CharacteristicLengthMin", mesh_size)
-gmsh.option.setNumber("Mesh.CharacteristicLengthMax", mesh_size)
+print("Spar curves:", spar_edge_curves)
+
+
+# ------------------------------------------------------------
+# 7. Local mesh refinement
+# ------------------------------------------------------------
+# We use a background mesh field to refine the mesh near the outer
+# heave-plate edge while allowing the mesh to become coarser away
+# from that region.
+mesh_size = 0.05
+
+spar_threshold = get_threshold_field(
+    gmsh,
+    spar_edge_curves,
+    spar_radius,
+    size_min=0.01,
+    size_max=mesh_size,
+    dist_min=0.02,
+    dist_max=0.10
+)
+   
+# 7d) Mesh generation options
+# Prevent Gmsh from extending small boundary mesh sizes across entire
+# adjacent surfaces. This helps keep refinement localized near the
+# heave-plate edge instead of spreading across the full top and bottom
+# faces of the plate.
+gmsh.option.setNumber("Mesh.MeshSizeExtendFromBoundary", 0)
+
+# Optional advanced controls:
+# These can be disabled if you want the background field to dominate
+# the mesh-size calculation without additional point- or curvature-based
+# refinement.
+#
+# gmsh.option.setNumber("Mesh.MeshSizeFromPoints", 0)
+# gmsh.option.setNumber("Mesh.MeshSizeFromCurvature", 0)
+
+# 7e) Activate the background mesh field
+# The threshold field now defines the target mesh size throughout
+# the model.
+gmsh.model.mesh.field.setAsBackgroundMesh(spar_threshold)
 
 # ------------------------------------------------------------
 # 6. Generate the mesh
@@ -96,7 +135,7 @@ gmsh.model.mesh.generate(2)
 # ------------------------------------------------------------
 # The .msh format is Gmsh's native mesh format.
 
-gmsh.write("spar_buoy.msh")
+gmsh.write("spar_buoy_refined.msh")
 
 # ------------------------------------------------------------
 # 8. Finalize Gmsh
