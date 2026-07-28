@@ -28,7 +28,7 @@ gmsh.model.add("spar_buoy_refined")
 #
 # The cylinder axis will point in the positive z-direction.
 
-spar_radius = 0.089/2      # Cylinder radius [m] (0.089 m ~ 3.5 in)
+spar_radius = 0.0254     # Cylinder radius [m] 
 spar_height = 6.096      # Cylinder height [m] (6.096 m ~ 20 ft)
 
 # The cylinder is defined by:
@@ -96,10 +96,10 @@ spar_threshold = get_threshold_field(
     gmsh,
     spar_edge_curves,
     spar_radius,
-    size_min=0.01,
+    size_min=spar_radius/5,
     size_max=mesh_size,
-    dist_min=0.02,
-    dist_max=0.10
+    dist_min=spar_radius/10,
+    dist_max=10*spar_radius
 )
    
 # 7d) Mesh generation options
@@ -135,7 +135,7 @@ gmsh.model.mesh.generate(2)
 # ------------------------------------------------------------
 # The .msh format is Gmsh's native mesh format.
 
-gmsh.write("spar_buoy_refined.msh")
+gmsh.write("../meshes/spar_buoy_refined.msh")
 
 # ------------------------------------------------------------
 # 8. Finalize Gmsh

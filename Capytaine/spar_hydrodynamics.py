@@ -62,7 +62,7 @@ T = 2*np.pi / omega
 # 4. Generate body
 # -------------------------------
 # Load the mesh
-mesh_input = cpt.load_mesh('../Gmsh/spar_buoy.msh',file_format='gmsh')
+mesh_input = cpt.load_mesh('../Gmsh/meshes/spar_buoy_refined_test.msh',file_format='gmsh')
 mesh_input.show_matplotlib()
 
 # Position the mesh w/ reference to the still water level
