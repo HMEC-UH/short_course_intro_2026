@@ -20,27 +20,29 @@ Only the exterior surfaces are exported. Internal construction surfaces
 between the three volumes are excluded from the final mesh.
 """
 
-import math
-
-import gmsh
+import math, gmsh
 
 
 # =============================================================================
-# USER-DEFINED PARAMETERS
+# 1. USER-DEFINED PARAMETERS
 # =============================================================================
 
-# Geometry --------------------------------------------------------------------
-
-spar_radius = 0.0254          # Spar radius [m]
+# Spar geometry ---------------------------------------------------------------
+spar_radius = 0.0301625  # Cylinder radius [m] (2.375" dia)
 spar_height = 6.096           # Spar height above the plate [m]
 
+
+# Annulus geometry ------------------------------------------------------------
 plate_radius = 0.3048         # Heave-plate radius [m]
 plate_thickness = 0.009525    # Heave-plate thickness [m]
 
 # The top of the heave plate is placed at z = 0.
 plate_z_top = 0.0
-plate_z_bottom = plate_z_top - plate_thickness
 
+# Annulus coordinates
+annulus_x0 = 0.0
+annulus_y0 = 0.0
+annulus_z0 = 0.0
 
 # Mesh resolution -------------------------------------------------------------
 
@@ -58,11 +60,13 @@ plate_mesh_size = 0.05
 
 
 # Numerical tolerances --------------------------------------------------------
-
 geometry_tolerance = 1.0e-6
 curve_length_tolerance = 1.0e-6
 surface_area_tolerance_fraction = 0.01
 
+# Names------------------------------------------------------------------------
+model_name = 'spar_with_heave_plate'
+mesh_fname = 'staged_extrusion_spar_plate'
 
 # =============================================================================
 # HELPER FUNCTIONS
@@ -314,213 +318,211 @@ def report_surface_elements(surface_tags):
 
 
 # =============================================================================
-# BUILD THE MODEL
+# 2. INITIALIZE GMSH
 # =============================================================================
-
-# Finalize any Gmsh session left open by an earlier interactive run.
 if gmsh.isInitialized():
     gmsh.finalize()
 
+# This starts the Gmsh Python API. It must be called before using
+# any Gmsh functions.
 gmsh.initialize()
 
-try:
-    gmsh.model.add("spar_with_heave_plate")
 
-    # -------------------------------------------------------------------------
-    # 1. Partition the heave-plate footprint
-    # -------------------------------------------------------------------------
+# Give the model a name. This is useful when working with
+# multiple geometries or when inspecting output files.
+gmsh.model.add(model_name)
 
-    # The large disk represents the complete plate footprint.
-    outer_disk = gmsh.model.occ.addDisk(
-        0.0,
-        0.0,
-        plate_z_bottom,
-        plate_radius,
-        plate_radius,
+# =============================================================================
+# 3. CREATE GEOMETRY
+# =============================================================================
+# Bottom of plate
+plate_z_bottom = plate_z_top - plate_thickness
+
+# The large disk represents the complete plate footprint.
+outer_disk = gmsh.model.occ.addDisk(
+    annulus_x0,
+    annulus_y0,
+    plate_z_bottom,
+    plate_radius,
+    plate_radius,
+)
+
+# The smaller disk matches the spar cross section.
+inner_disk = gmsh.model.occ.addDisk(
+    annulus_x0,
+    annulus_y0,
+    plate_z_bottom,
+    spar_radius,
+    spar_radius,
+)
+
+# Fragmenting the disks divides the plate footprint into two conformal
+# regions:
+#
+#   1. a central disk beneath the spar;
+#   2. an annulus forming the remainder of the heave plate.
+#
+# The fragment operation is performed before extrusion so that the
+# resulting volumes share geometric interfaces and mesh nodes.
+partitioned_entities, _ = gmsh.model.occ.fragment(
+    [(2, outer_disk)],
+    [(2, inner_disk)],
+)
+
+gmsh.model.occ.synchronize()
+
+source_surfaces = sorted(
+    tag
+    for dimension, tag in partitioned_entities
+    if dimension == 2
+)
+
+if len(source_surfaces) != 2:
+    raise RuntimeError(
+        "Expected the footprint to contain one central disk and "
+        f"one annulus, but found surfaces {source_surfaces}."
     )
 
-    # The smaller disk matches the spar cross section.
-    inner_disk = gmsh.model.occ.addDisk(
-        0.0,
-        0.0,
-        plate_z_bottom,
-        spar_radius,
-        spar_radius,
+print("Partitioned source surfaces:", source_surfaces)
+
+# Control the spar circumferential resolution----------------------------------
+inner_source_circle, outer_source_circle = (
+    find_source_circles(
+        source_surfaces=source_surfaces,
+        spar_radius=spar_radius,
+        plate_radius=plate_radius,
+        source_z=plate_z_bottom,
     )
+)
 
-    # Fragmenting the disks divides the plate footprint into two conformal
-    # regions:
-    #
-    #   1. a central disk beneath the spar;
-    #   2. an annulus forming the remainder of the heave plate.
-    #
-    # The fragment operation is performed before extrusion so that the
-    # resulting volumes share geometric interfaces and mesh nodes.
-    partitioned_entities, _ = gmsh.model.occ.fragment(
-        [(2, outer_disk)],
-        [(2, inner_disk)],
-    )
+print("Spar source circle:", inner_source_circle)
+print("Plate outer circle:", outer_source_circle)
 
-    gmsh.model.occ.synchronize()
+# A transfinite curve specifies the exact number of nodes on a curve.
+# Therefore, one is added to convert the desired number of panels into
+# the required number of nodes.
+#
+# This circular discretization is inherited by the extruded spar wall.
+gmsh.model.mesh.setTransfiniteCurve(
+    inner_source_circle,
+    n_spar_circumference + 1,
+)
 
-    source_surfaces = sorted(
-        tag
-        for dimension, tag in partitioned_entities
-        if dimension == 2
-    )
+# The outer plate circle is intentionally left unconstrained. Its
+# discretization is determined by plate_mesh_size together with the
+# unstructured mesh on the plate faces.
 
-    if len(source_surfaces) != 2:
-        raise RuntimeError(
-            "Expected the footprint to contain one central disk and "
-            f"one annulus, but found surfaces {source_surfaces}."
-        )
+# Extrusion--------------------------------------------------------------------
+gmsh.model.occ.extrude(
+    [(2, surface) for surface in source_surfaces],
+    annulus_x0,
+    annulus_y0,
+    plate_thickness,
+    numElements=[n_plate_thickness],
+    recombine=True,
+)
 
-    print("Partitioned source surfaces:", source_surfaces)
+gmsh.model.occ.synchronize()
 
-    # -------------------------------------------------------------------------
-    # 2. Control the spar circumferential resolution
-    # -------------------------------------------------------------------------
+# =============================================================================
+# 4. IDENTIFY THE CENTRAL TOP SURFACE OF THE PLATE
+# =============================================================================
+central_top_surface = find_central_horizontal_surface(
+    target_z=plate_z_top,
+    target_radius=spar_radius,
+)
 
-    inner_source_circle, outer_source_circle = (
-        find_source_circles(
-            source_surfaces=source_surfaces,
-            spar_radius=spar_radius,
-            plate_radius=plate_radius,
-            source_z=plate_z_bottom,
-        )
-    )
+print("Central plate-top surface:", central_top_surface)
 
-    print("Spar source circle:", inner_source_circle)
-    print("Plate outer circle:", outer_source_circle)
+# Extrued----------------------------------------------------------------------
+gmsh.model.occ.extrude(
+    [(2, central_top_surface)],
+    0.0,
+    0.0,
+    spar_height,
+    numElements=[n_spar_axial],
+    recombine=True,
+)
 
-    # A transfinite curve specifies the exact number of nodes on a curve.
-    # Therefore, one is added to convert the desired number of panels into
-    # the required number of nodes.
-    #
-    # This circular discretization is inherited by the extruded spar wall.
-    gmsh.model.mesh.setTransfiniteCurve(
-        inner_source_circle,
-        n_spar_circumference + 1,
-    )
+gmsh.model.occ.synchronize()
 
-    # The outer plate circle is intentionally left unconstrained. Its
-    # discretization is determined by plate_mesh_size together with the
-    # unstructured mesh on the plate faces.
+# =============================================================================
+# 5. EXTRACT THE EXTERIOR BOUNDARY
+# =============================================================================
 
-    # -------------------------------------------------------------------------
-    # 3. Extrude the complete heave plate
-    # -------------------------------------------------------------------------
+volumes, exterior_surfaces = get_exterior_surfaces()
 
-    gmsh.model.occ.extrude(
-        [(2, surface) for surface in source_surfaces],
-        0.0,
-        0.0,
-        plate_thickness,
-        numElements=[n_plate_thickness],
-        recombine=True,
-    )
+all_surfaces = {
+    tag
+    for dimension, tag in gmsh.model.getEntities(2)
+}
 
-    gmsh.model.occ.synchronize()
+internal_surfaces = sorted(
+    all_surfaces - set(exterior_surfaces)
+)
 
-    # -------------------------------------------------------------------------
-    # 4. Identify the central top surface of the plate
-    # -------------------------------------------------------------------------
+print("Construction volumes:", volumes)
+print("Exterior surfaces:", exterior_surfaces)
+print("Internal construction surfaces:", internal_surfaces)
 
-    central_top_surface = find_central_horizontal_surface(
-        target_z=plate_z_top,
-        target_radius=spar_radius,
-    )
+# The model contains multiple construction volumes, but Capytaine needs
+# only their combined exterior boundary. A two-dimensional physical group
+# identifies the surfaces that will be exported.
+wetted_surface_group = gmsh.model.addPhysicalGroup(
+    2,
+    exterior_surfaces,
+)
 
-    print("Central plate-top surface:", central_top_surface)
+gmsh.model.setPhysicalName(
+    2,
+    wetted_surface_group,
+    "Wetted surface",
+)
 
-    # -------------------------------------------------------------------------
-    # 5. Continue the central surface upward to create the spar
-    # -------------------------------------------------------------------------
+# =============================================================================
+# 6. SET THE UNSTRUTURED PLATE-FACE RESOLUTION
+# =============================================================================
 
-    gmsh.model.occ.extrude(
-        [(2, central_top_surface)],
-        0.0,
-        0.0,
-        spar_height,
-        numElements=[n_spar_axial],
-        recombine=True,
-    )
+# Point-based mesh sizes guide the unstructured triangulation on the
+# horizontal plate faces. The transfinite constraint on the inner circle
+# still controls the exact spar circumference.
+gmsh.model.mesh.setSize(
+    gmsh.model.getEntities(0),
+    plate_mesh_size,
+)
 
-    gmsh.model.occ.synchronize()
+# MeshSizeMax also limits element growth away from the plate boundaries.
+gmsh.option.setNumber(
+    "Mesh.MeshSizeMax",
+    plate_mesh_size,
+)
 
-    # -------------------------------------------------------------------------
-    # 6. Extract the exterior boundary
-    # -------------------------------------------------------------------------
+# =============================================================================
+# 7. GENERATE THE MESH
+# =============================================================================
 
-    volumes, exterior_surfaces = get_exterior_surfaces()
+gmsh.model.mesh.generate(2)
 
-    all_surfaces = {
-        tag
-        for dimension, tag in gmsh.model.getEntities(2)
-    }
+# This should normally have little or nothing to remove because the
+# staged construction creates conformal interfaces. It provides an
+# additional safeguard against coincident duplicate nodes.
+gmsh.model.mesh.removeDuplicateNodes()
 
-    internal_surfaces = sorted(
-        all_surfaces - set(exterior_surfaces)
-    )
+report_surface_elements(exterior_surfaces)
 
-    print("Construction volumes:", volumes)
-    print("Exterior surfaces:", exterior_surfaces)
-    print("Internal construction surfaces:", internal_surfaces)
+# Mesh.SaveAll = 0 tells Gmsh to write only entities belonging to a
+# physical group. Internal construction surfaces are therefore omitted.
+gmsh.option.setNumber(
+    "Mesh.SaveAll",
+    0,
+)
 
-    # The model contains multiple construction volumes, but Capytaine needs
-    # only their combined exterior boundary. A two-dimensional physical group
-    # identifies the surfaces that will be exported.
-    wetted_surface_group = gmsh.model.addPhysicalGroup(
-        2,
-        exterior_surfaces,
-    )
+fout = "../meshes/" + mesh_fname + ".msh"
+gmsh.write(fout)
 
-    gmsh.model.setPhysicalName(
-        2,
-        wetted_surface_group,
-        "Wetted surface",
-    )
+# =============================================================================
+# 8. FINALIZE
+# =============================================================================
+# This closes the Gmsh API session.
 
-    # -------------------------------------------------------------------------
-    # 7. Set the unstructured plate-face resolution
-    # -------------------------------------------------------------------------
-
-    # Point-based mesh sizes guide the unstructured triangulation on the
-    # horizontal plate faces. The transfinite constraint on the inner circle
-    # still controls the exact spar circumference.
-    gmsh.model.mesh.setSize(
-        gmsh.model.getEntities(0),
-        plate_mesh_size,
-    )
-
-    # MeshSizeMax also limits element growth away from the plate boundaries.
-    gmsh.option.setNumber(
-        "Mesh.MeshSizeMax",
-        plate_mesh_size,
-    )
-
-    # -------------------------------------------------------------------------
-    # 8. Generate and export the surface mesh
-    # -------------------------------------------------------------------------
-
-    gmsh.model.mesh.generate(2)
-
-    # This should normally have little or nothing to remove because the
-    # staged construction creates conformal interfaces. It provides an
-    # additional safeguard against coincident duplicate nodes.
-    gmsh.model.mesh.removeDuplicateNodes()
-
-    report_surface_elements(exterior_surfaces)
-
-    # Mesh.SaveAll = 0 tells Gmsh to write only entities belonging to a
-    # physical group. Internal construction surfaces are therefore omitted.
-    gmsh.option.setNumber(
-        "Mesh.SaveAll",
-        0,
-    )
-
-    gmsh.write("../meshes/staged_extrusion_spar_plate.msh")
-
-
-finally:
-    gmsh.finalize()
+gmsh.finalize()
