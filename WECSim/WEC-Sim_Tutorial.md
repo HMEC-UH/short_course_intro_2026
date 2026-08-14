@@ -66,6 +66,8 @@ The RM3 is comprised of:
 
 <img src="media/image2.png" style="width:5.158in;height:7.11429in" />
 
+Save this file as "RM3.slx"
+
 ## Step 3 — Create a WEC-Sim Input File
 
 Now that we understand the geometry and hydrodynamic data, we can begin building the WEC-Sim model.
