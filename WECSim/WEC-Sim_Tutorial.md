@@ -191,11 +191,9 @@ Create a body object for the float:
 
 body(1) = bodyClass('hydroData/rm3.h5');
 
-% Create the body(1) Variable, Set Location of Hydrodynamic Data File
+% Links hydrodata to body(1). body 1 in hydrodata will be assigned to body(1) in simulink. 
 
-% and Body Number Within this File.
-
-body(1).geometryFile = 'RM3_Float.stl';
+body(1).geometryFile = 'RM3_Float.stl'; % assigns the float geometry to body(1)
 ```
 
 Then define the spar:
@@ -205,7 +203,9 @@ Then define the spar:
 
 body(2) = bodyClass('hydroData/rm3.h5');
 
-body(2).geometryFile = 'RM3_Spar.stl';
+% Links hydrodata to body(2). body 2 in hydrodata will be assigned to body(2) in simulink. 
+
+body(2).geometryFile = 'RM3_Spar.stl'; % assigns the spar geometry to body(1)
 ```
 
 At this point, WEC-Sim knows the geometry and hydrodynamics of the two bodies. We can also input the physical properties such as mass and inertia.
