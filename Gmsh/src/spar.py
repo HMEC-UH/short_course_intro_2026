@@ -48,7 +48,7 @@ n_circumference = 24
 
 # Names------------------------------------------------------------------------
 model_name = 'spar_buoy_refined'
-mesh_fname = 'new_spar_buoy_refined'
+mesh_fname = 'spar_buoy_refined'
 
 # =============================================================================
 # 2. INITIALIZE GMSH

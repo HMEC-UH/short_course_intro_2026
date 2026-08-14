@@ -79,7 +79,7 @@ output_dir = '../output/'
 # Bodies
 analysis = 'spar'
 if analysis == 'spar':
-    body1_mesh = mesh_dir + 'new_spar_buoy_refined.msh'
+    body1_mesh = mesh_dir + 'spar_buoy_refined.msh'
     body1_mass = spar_mass + ballast_mass
     body1_cg = (spar_mass*spar_cg + ballast_mass*ballast_cg)/body1_mass 
     
@@ -98,7 +98,7 @@ if analysis == 'spar':
     )
     
 elif analysis == 'spar_heave':
-    body1_mesh = mesh_dir + 'staged_extrusion_spar_plate.msh'
+    body1_mesh = mesh_dir + 'spar_with_heave_plate.msh'
     body1_mass = spar_mass + ballast_mass + heave_mass
     body1_cg = (spar_mass*spar_cg + ballast_mass*ballast_cg + heave_mass*heave_cg)/body1_mass
     

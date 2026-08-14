@@ -66,7 +66,7 @@ surface_area_tolerance_fraction = 0.01
 
 # Names------------------------------------------------------------------------
 model_name = 'spar_with_heave_plate'
-mesh_fname = 'staged_extrusion_spar_plate'
+mesh_fname = 'spar_with_heave_plate'
 
 # =============================================================================
 # HELPER FUNCTIONS
