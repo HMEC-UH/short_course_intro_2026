@@ -28,7 +28,7 @@ import math, gmsh
 # =============================================================================
 
 # Spar geometry ---------------------------------------------------------------
-spar_radius = 0.0301625  # Cylinder radius [m] (2.375" dia)
+spar_radius = 0.0301625       # Cylinder radius [m] (2.375" dia)
 spar_height = 6.096           # Spar height above the plate [m]
 
 

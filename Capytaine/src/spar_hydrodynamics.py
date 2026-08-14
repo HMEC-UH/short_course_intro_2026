@@ -10,9 +10,9 @@ import capytaine as cpt
 import numpy as np
 import xarray as xr
 import matplotlib.pyplot as plt
-from calculate_draft import calculate_hydrostatic_equilibrium
-from mesh_plots import plot_mesh_profile
-from animate_body import animate_body, rao_animation
+from functions.calculate_draft import calculate_hydrostatic_equilibrium
+from functions.mesh_plots import plot_mesh_profile
+from functions.animate_body import animate_body, rao_animation
 
 # =============================================================================
 # 1. CONFIGURE
@@ -72,11 +72,14 @@ annular_mass = 4.535924         # (kg)
 annular_cg = 0.1525             # Z - Center of gravity (m)
 annulus_height = 0.305          # Cylinder height [m]
 
+# Directories
+mesh_dir = '../../Gmsh/meshes/'
+output_dir = '../output/'
 
-
+# Bodies
 analysis = 'spar'
 if analysis == 'spar':
-    body1_mesh = '../Gmsh/meshes/new_spar_buoy_refined.msh'
+    body1_mesh = mesh_dir + 'new_spar_buoy_refined.msh'
     body1_mass = spar_mass + ballast_mass
     body1_cg = (spar_mass*spar_cg + ballast_mass*ballast_cg)/body1_mass 
     
@@ -95,7 +98,7 @@ if analysis == 'spar':
     )
     
 elif analysis == 'spar_heave':
-    body1_mesh = '../Gmsh/meshes/staged_extrusion_spar_plate.msh'
+    body1_mesh = mesh_dir + 'staged_extrusion_spar_plate.msh'
     body1_mass = spar_mass + ballast_mass + heave_mass
     body1_cg = (spar_mass*spar_cg + ballast_mass*ballast_cg + heave_mass*heave_cg)/body1_mass
     
@@ -114,7 +117,7 @@ elif analysis == 'spar_heave':
     )
     
 elif analysis == 'annulus':
-    body1_mesh = '../Gmsh/meshes/annular_body.msh'
+    body1_mesh = mesh_dir + 'annular_body.msh'
     body1_mass = annular_mass
     body1_cg = annular_cg
     
@@ -259,7 +262,7 @@ cb = hydrostatics['center_of_buoyancy']
 
 # Files needed by BEMIO in WEC-Sim
 # 1 - center of gravity and buoyancy
-output_file1 = f"Hydrostatics_{body.name}.dat"
+output_file1 = f"{output_dir}Hydrostatics_{body.name}.dat"
 with open(output_file1, 'w') as f:
     for j in [0, 1, 2]:
         line = f'XF = {cb[j]:7.3f} - XG = {cg[j]:7.3f} \n'
@@ -268,7 +271,7 @@ with open(output_file1, 'w') as f:
     f.write(line)
 
 # 2 - stiffness coefficients
-output_file2 = f"KH_{body.name}.dat"
+output_file2 = f"{output_dir}KH_{body.name}.dat"
 np.savetxt(output_file2, body.hydrostatic_stiffness.data)
 
 # Hydrostatic summary

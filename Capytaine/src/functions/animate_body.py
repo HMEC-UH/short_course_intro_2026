@@ -13,10 +13,10 @@ from capytaine.ui.vtk.animation import Animation
 
 def animate_body(solver,full_body,body):
     
-    diffraction_problem = cpt.DiffractionProblem(body=body, wave_direction=0.0, omega=2.0)
+    diffraction_problem = cpt.DiffractionProblem(body=body, wave_direction=0.0, omega=3.0)
     diffraction_result = solver.solve(diffraction_problem)
     
-    radiation_problem = cpt.RadiationProblem(body=body, radiating_dof="Heave", omega=2.0)
+    radiation_problem = cpt.RadiationProblem(body=body, radiating_dof="Heave", omega=3.0)
     radiation_result = solver.solve(radiation_problem)
     
     # Define a mesh of the free surface and compute the free surface elevation
@@ -30,17 +30,17 @@ def animate_body(solver,full_body,body):
     # Run the animations
     animation = Animation(loop_duration=diffraction_result.period)
     animation.add_body(full_body, faces_motion=None)
-    animation.add_free_surface(free_surface, faces_elevation=0.5*diffraction_elevation_at_faces)
+    animation.add_free_surface(free_surface, faces_elevation=0.25*diffraction_elevation_at_faces)
     animation.run(camera_position=(-30, -30, 30))  # The camera is oriented towards (0, 0, 0) by default.
     # animation.save("path/to/the/video/file.ogv", camera_position=(-30, -30, 30))
     
     animation = Animation(loop_duration=radiation_result.period)
     animation.add_body(full_body, faces_motion=full_body.dofs["Heave"])
-    animation.add_free_surface(free_surface, faces_elevation=3.0*radiation_elevation_at_faces)
+    animation.add_free_surface(free_surface, faces_elevation=0.25*radiation_elevation_at_faces)
     animation.run(camera_position=(-30, -30, 30))
     
     
-    
+# RAO setup    
 def setup_animation(solver, body, fs, omega, wave_amplitude, wave_direction):
     # SOLVE BEM PROBLEMS
     radiation_problems = [cpt.RadiationProblem(omega=omega, body=body.immersed_part(), radiating_dof=dof) for dof in body.dofs]
@@ -71,8 +71,8 @@ def setup_animation(solver, body, fs, omega, wave_amplitude, wave_direction):
     return animation
 
 def rao_animation(solver,full_body):
-    fs = cpt.FreeSurface(x_range=(-5, 5), y_range=(-5, 5), nx=100, ny=100)
+    fs = cpt.FreeSurface(x_range=(-10, 10), y_range=(-10, 10), nx=100, ny=100)
 
-    anim = setup_animation(solver, full_body, fs, omega=1.5, wave_amplitude=0.25, wave_direction=pi)
-    anim.run(camera_position=(70, 70, 100), resolution=(800, 600))
+    anim = setup_animation(solver, full_body, fs, omega=1.0, wave_amplitude=0.25, wave_direction=pi)
+    anim.run(camera_position=(-30, -30, 30), resolution=(800, 600))
     
