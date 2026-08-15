@@ -10,7 +10,11 @@ nav:
     - Gmsh: Gmsh/gmsh.md
   - Hydrodynamic Coefficients:
     - Overview: Capytaine/index.md
+    - Meshmagick: Capytaine/meshmagick.md
     - Capytaine: Capytaine/capytaine.md
+    - Example 1 - Spar Buoy: Capytaine/spar_buoy.md
+    - Example 2- Heave Plate: Capytaine/heave_plate.md
+    - Example 3- Two Body: Capytaine/two_body.md
   - Multibody:
     - Overview: WECSim/index.md
     - WEC-Sim: WECSim/wecsim.md
@@ -37,10 +41,16 @@ markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
+  - pymdownx.arithmatex:
+      generic: true
 
 extra_css:
   - stylesheets/alignments.css
   - stylesheets/color_scheme.css
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-svg.js
 
 plugins:
   - search

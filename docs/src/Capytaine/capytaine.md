@@ -67,11 +67,26 @@ To configure the interpreter:
 
 *Figure 2: Point to Python interpreter in ++"capytaine"++ environment.*
 
-After applying the change, close the current IPython console by clicking the ++"X"++ on the console tab. Spyder should automatically start a new console using the interpreter from the ++"capytaine"++ environment.
+During this course, we will create several three-dimensional plots that are easier to inspect interactively. In particular, interactive plotting allows us to rotate, pan, and zoom the view when inspecting our Capytaine meshes.
+
+Often by default, Spyder displays Matplotlib figures within the Plots pane. To instead open figures in a separate interactive window, we need to change the Matplotlib graphics backend.
+
+From the Spyder menu, 
+
+1. Open `Tools > Preferences > IPython console`
+2. Select `Selected Plotting`
+
+Under ++"Graphics backend"++, select ++"Qt"++ from the drop-down menu. The ++"Tk"++ backend may also be used if Qt is unavailable.
+
+![Select Interactive](assets/images/spyder_set_interactive.png){#spyder-set-inter}
+
+*Figure 3: Configure Spyder to generate interactive plots.*
+
+After applying the changes, close the current IPython console by clicking the ++"X"++ on the console tab. Spyder should automatically start a new console using the interpreter from the ++"capytaine"++ environment with interactive plotting enabled.
 
 ![Active Interpreter](assets/images/spyder_active_env.png){#spyder-active-env}
 
-*Figure 3: Active newly defined interpreter.*
+*Figure 4: Active newly defined interpreter.*
 
 You can confirm the active interpreter by looking at the bottom of the window. It should say ++"capytaine"++ like in Figure 3 above. You can also verify the Capytaine installation directly from the IPython console:
 
@@ -79,11 +94,5 @@ You can confirm the active interpreter by looking at the bottom of the window. I
     cpt.__version__
 
 If a version number is returned without errors, Spyder is successfully connected to the ++"capytaine"++ environment.
-
-
-## Configuration
-Create a new Python script in the Spyder editor. As mentioned previously, Spyder automatically inserts a template that includes a section enclosed by triple quotes ("""). This area is commonly used to provide a brief description of the script, document its purpose, record authorship information, or include other notes that may be helpful to future users.
-
-Begin by importing the necessary packages, modules, and functions that will be needed later in the code
 
 
