@@ -77,7 +77,7 @@ mesh_dir = '../../Gmsh/meshes/'
 output_dir = '../output/'
 
 # Bodies
-analysis = 'spar'
+analysis = 'spar_heave'
 if analysis == 'spar':
     body1_mesh = mesh_dir + 'spar_buoy_refined.msh'
     body1_mass = spar_mass + ballast_mass
