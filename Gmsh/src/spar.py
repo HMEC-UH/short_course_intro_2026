@@ -130,7 +130,7 @@ for curve in bottom_curves:
     )
 
 # =============================================================================
-# 5. GENERATE THE MESH
+# 6. GENERATE THE MESH
 # =============================================================================
 # We will be most interested in the surface (2) mesh of the body rather than
 # the full volume (3) mesh.
@@ -138,7 +138,7 @@ for curve in bottom_curves:
 gmsh.model.mesh.generate(2)
 
 # =============================================================================
-# 6. WRITE THE MESH TO A FILE
+# 7. WRITE THE MESH TO A FILE
 # =============================================================================
 # The .msh format is Gmsh's native mesh format.
 
@@ -146,7 +146,7 @@ fout = "../meshes/" + mesh_fname + ".msh"
 gmsh.write(fout)
 
 # =============================================================================
-# 6. FINALIZE
+# 8. FINALIZE
 # =============================================================================
 # This closes the Gmsh API session.
 

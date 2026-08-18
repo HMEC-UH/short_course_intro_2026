@@ -8,14 +8,16 @@ nav:
   - Mesh Generation:
     - Overview: Gmsh/index.md
     - Gmsh: Gmsh/gmsh.md
+    - Start with Spar: Gmsh/spar.md
+    - Floating Body: Gmsh/annulus.md
+    - Spar w/ Heave Plate: Gmsh/heave_plate.md
   - Hydrodynamic Coefficients:
     - Overview: Capytaine/index.md
     - Meshmagick: Capytaine/meshmagick.md
     - Capytaine: Capytaine/capytaine.md
-    - Example 1 - Spar Buoy: Capytaine/spar_buoy.md
-    - Example 2- Heave Plate: Capytaine/heave_plate.md
-    - Example 3- Two Body: Capytaine/two_body.md
-  - Multibody:
+    - e.g. Single Floating Body: Capytaine/one_body.md
+    - e.g. Two Floating Bodies: Capytaine/two_body.md
+  - Multibody Dynamics:
     - Overview: WECSim/index.md
     - WEC-Sim: WECSim/wecsim.md
 

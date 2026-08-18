@@ -72,12 +72,7 @@ mesh_fname = 'spar_with_heave_plate'
 # HELPER FUNCTIONS
 # =============================================================================
 
-def find_source_circles(
-    source_surfaces,
-    spar_radius,
-    plate_radius,
-    source_z,
-):
+def find_source_circles(source_surfaces,spar_radius,plate_radius,source_z):
     """
     Identify the inner and outer circular curves of the partitioned plate.
 
@@ -126,15 +121,9 @@ def find_source_circles(
 
     for curve in source_curves:
 
-        _, _, z_min, _, _, z_max = gmsh.model.getBoundingBox(
-            1,
-            curve,
-        )
+        _, _, z_min, _, _, z_max = gmsh.model.getBoundingBox(1,curve)
 
-        curve_length = gmsh.model.occ.getMass(
-            1,
-            curve,
-        )
+        curve_length = gmsh.model.occ.getMass(1,curve)
 
         lies_on_source_plane = (
             abs(z_min - source_z) < geometry_tolerance
@@ -171,10 +160,7 @@ def find_source_circles(
     return inner_circles[0], outer_circles[0]
 
 
-def find_central_horizontal_surface(
-    target_z,
-    target_radius,
-):
+def find_central_horizontal_surface(target_z,target_radius):
     """
     Find the horizontal circular surface at a specified elevation.
 
@@ -191,15 +177,9 @@ def find_central_horizontal_surface(
 
     for dimension, surface in gmsh.model.getEntities(2):
 
-        _, _, z_min, _, _, z_max = gmsh.model.getBoundingBox(
-            dimension,
-            surface,
-        )
+        _, _, z_min, _, _, z_max = gmsh.model.getBoundingBox(dimension,surface)
 
-        surface_area = gmsh.model.occ.getMass(
-            dimension,
-            surface,
-        )
+        surface_area = gmsh.model.occ.getMass(dimension,surface)
 
         is_horizontal = (
             abs(z_max - z_min) < geometry_tolerance
@@ -326,7 +306,6 @@ if gmsh.isInitialized():
 # This starts the Gmsh Python API. It must be called before using
 # any Gmsh functions.
 gmsh.initialize()
-
 
 # Give the model a name. This is useful when working with
 # multiple geometries or when inspecting output files.
