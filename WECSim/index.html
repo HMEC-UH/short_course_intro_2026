@@ -77,6 +77,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#from-analysis-to-design" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -274,6 +279,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -351,6 +362,90 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Gmsh/spar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start with Spar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Gmsh/annulus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Floating Body
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Gmsh/heave_plate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spar w/ Heave Plate
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -369,8 +464,6 @@
       
         
           
-        
-      
         
       
         
@@ -493,42 +586,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../Capytaine/spar_buoy/" class="md-nav__link">
+      <a href="../Capytaine/one_body/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Example 1 - Spar Buoy
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../Capytaine/heave_plate/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Example 2- Heave Plate
+    e.g. Single Floating Body
   
 
     
@@ -556,7 +621,7 @@
   <span class="md-ellipsis">
     
   
-    Example 3- Two Body
+    e.g. Two Floating Bodies
   
 
     
@@ -613,7 +678,7 @@
   <span class="md-ellipsis">
     
   
-    Multibody
+    Multibody Dynamics
   
 
     
@@ -635,7 +700,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Multibody
+    Multibody Dynamics
   
 
           </label>
@@ -695,6 +760,8 @@
   
   
   
+    
+  
   
 </nav>
                   </div>
@@ -714,9 +781,21 @@
   
 
 
-  <h1>Overview</h1>
-
-<p>This is a test</p>
+<p>The hydrodynamic analysis introduced in the previous section describes how individual bodies interact with the surrounding fluid and incoming waves. For a complete marine energy system, however, hydrodynamics represents only part of the problem. The motion of each body may also depend on its connection to other bodies, the power take-off (PTO) system, moorings, mechanical constraints, and other forces acting on the system.</p>
+<p><strong>Multibody dynamics</strong> provides a framework for bringing these components together into a single dynamic model. Rather than considering each body independently, the system is represented as a collection of interconnected bodies whose motions and forces evolve together through time.</p>
+<p>For a wave energy converter, this allows us to introduce important elements of the physical system, including:</p>
+<ul>
+<li><strong>Power take-off (PTO) systems</strong> that convert relative motion into useful power.</li>
+<li><strong>Joints and constraints</strong> that define how individual bodies can move relative to one another.</li>
+<li><strong>Mooring systems</strong> that constrain the device while introducing additional restoring and damping forces.</li>
+<li><strong>Control strategies</strong> that modify the response of the device to improve performance or satisfy operational constraints.</li>
+<li><strong>Environmental and external loads</strong> that act alongside the hydrodynamic forces calculated previously.</li>
+</ul>
+<p>By combining these elements with the body's mass properties, hydrostatics, and hydrodynamic coefficients, we can begin predicting the response and performance of the complete device rather than examining its individual components in isolation.</p>
+<h1 id="from-analysis-to-design">From Analysis to Design</h1>
+<p>The objective of multibody simulation is not simply to reproduce the motion of a device. It provides an engineering tool for exploring how a design is expected to behave <strong>before it is built</strong>.</p>
+<p>Numerical models allow us to investigate motions and loads, estimate power production, evaluate PTO and mooring configurations, identify potential design limitations, and compare alternative concepts under a range of operating conditions. As the design matures, these predictions can help guide engineering decisions and identify problems while changes are still relatively inexpensive to make.</p>
+<p>In this way, multibody simulation provides an important bridge between <strong>hydrodynamic analysis and physical implementation</strong>, allowing us to evaluate performance, refine the design, and reduce the technical risk associated with building and testing a marine energy system.</p>
 
 
 
