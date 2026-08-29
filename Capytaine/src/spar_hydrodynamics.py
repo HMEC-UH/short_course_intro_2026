@@ -6,13 +6,18 @@ Created on Tue Jun 23 15:20:37 2026
 @author: troy
 """
 
-import capytaine as cpt
 import numpy as np
 import xarray as xr
+
+import capytaine as cpt
+from capytaine.io.mesh_writers import write_STL
+
 import matplotlib.pyplot as plt
+
 from functions.calculate_draft import calculate_hydrostatic_equilibrium
 from functions.mesh_plots import plot_mesh_profile
 from functions.animate_body import animate_body, rao_animation
+from functions.plot_analysis import radiation_plots, force_plots
 
 # =============================================================================
 # 1. CONFIGURE
@@ -64,6 +69,7 @@ heave_cg = 0.0047625            # Z - Center of gravity (m)
 
 # Ballast properties
 ballast_mass = 9.071847         # (kg)
+ballast_mass = 7.25748
 ballast_cg = 0.0762             # Z - Center of gravity (m)
 
 # Float properties
@@ -77,67 +83,66 @@ mesh_dir = '../../Gmsh/meshes/'
 output_dir = '../output/'
 
 # Bodies
-analysis = 'spar'
+analysis = 'spar_heave'
+
 if analysis == 'spar':
     body1_mesh = mesh_dir + 'spar_buoy_refined.msh'
+
     body1_mass = spar_mass + ballast_mass
-    body1_cg = (spar_mass*spar_cg + ballast_mass*ballast_cg)/body1_mass 
-    
-    # For a free floating body, need to shift to hydrostatic equilbrium
-    results = calculate_hydrostatic_equilibrium(
-        mesh_file=body1_mesh,
-        
-        mass=body1_mass,
-        cg_z=body1_cg,
-        outer_radius=spar_radius,
-        inner_radius=0.0,
-        heave_radius=None,
-        heave_thickness=None,
-        water_density=RHO,
-        gravity=G,
-    )
-    
+    body1_cg = (spar_mass * spar_cg
+                + ballast_mass * ballast_cg
+                ) / body1_mass
+
+    outer_radius = spar_radius
+    inner_radius = 0.0
+    heave_radius = None
+    heave_thickness = None
+
+
 elif analysis == 'spar_heave':
     body1_mesh = mesh_dir + 'spar_with_heave_plate.msh'
+
     body1_mass = spar_mass + ballast_mass + heave_mass
-    body1_cg = (spar_mass*spar_cg + ballast_mass*ballast_cg + heave_mass*heave_cg)/body1_mass
-    
-    # For a free floating body, need to shift to hydrostatic equilbrium
-    results = calculate_hydrostatic_equilibrium(
-        mesh_file=body1_mesh,
-        
-        mass=body1_mass,
-        cg_z=body1_cg,
-        outer_radius=spar_radius,
-        inner_radius=0.0,
-        heave_radius=plate_radius,
-        heave_thickness=plate_thickness,
-        water_density=RHO,
-        gravity=G,
-    )
-    
+    body1_cg = (
+        spar_mass * spar_cg
+        + ballast_mass * ballast_cg
+        + heave_mass * heave_cg
+    ) / body1_mass
+
+    outer_radius = spar_radius
+    inner_radius = 0.0
+    heave_radius = plate_radius
+    heave_thickness = plate_thickness
+
+
 elif analysis == 'annulus':
     body1_mesh = mesh_dir + 'annular_body.msh'
+
     body1_mass = annular_mass
     body1_cg = annular_cg
-    
-    # For a free floating body, need to shift to hydrostatic equilbrium
-    results = calculate_hydrostatic_equilibrium(
-        mesh_file=body1_mesh,
-        
-        mass=body1_mass,
-        cg_z=body1_cg,
-        outer_radius=annulus_outer_radius,
-        inner_radius=spar_radius,
-        heave_radius=None,
-        heave_thickness=None,
-        water_density=RHO,
-        gravity=G,
-    )
-        
-else:
-    raise ValueError(f"Unknown force type: {radiation_type}")
 
+    outer_radius = annulus_outer_radius
+    inner_radius = spar_radius
+    heave_radius = None
+    heave_thickness = None
+
+
+else:
+    raise ValueError(f"Unknown analysis type: {analysis}")
+
+
+# Determine hydrostatic equilibrium
+results = calculate_hydrostatic_equilibrium(
+    mesh_file=body1_mesh,
+    mass=body1_mass,
+    cg_z=body1_cg,
+    outer_radius=outer_radius,
+    inner_radius=inner_radius,
+    heave_radius=heave_radius,
+    heave_thickness=heave_thickness,
+    water_density=RHO,
+    gravity=G,
+)
 
 print(f"Analytic draft:   {results['analytic_draught']:.6f} m")
 print(f"Numerical draft:  {results['numerical_draught']:.6f} m")
@@ -160,7 +165,6 @@ omega = np.linspace(omega_min,omega_max,Period_N)
 T = 2*np.pi / omega
 
 
-
 # =============================================================================
 # 4. GENERATE BODY
 # =============================================================================
@@ -170,10 +174,15 @@ mesh_input = cpt.load_mesh(body1_mesh,file_format='gmsh')
 
 # Position the mesh w/ reference to the still water level
 mesh_input.translate_z(dz_hydrostatic)
-#mesh_input.show_matplotlib()
 
-# Create full body mesh for animations
-full_body = cpt.FloatingBody(mesh=mesh_input, center_of_mass=(0, 0, cg_hydrostatic), dofs={})
+# Save full body mesh for animations
+full_body = cpt.FloatingBody(
+    mesh=mesh_input,
+    center_of_mass=(0, 0, cg_hydrostatic),
+    dofs={},
+    name='full_body_1'
+)
+
 full_body.add_translation_dof(direction=[0, 0, 1], name='Heave')
 
 # Check equilibrium position
@@ -195,20 +204,19 @@ body = cpt.FloatingBody(
     mesh=mesh_input,
     lid_mesh=lid_mesh,
     center_of_mass=(0, 0, cg_hydrostatic),
-    dofs={}
+    dofs={},
+    name='body_1'
 ).immersed_part()
 
+# Append/overwrite definitions
+body.rotation_center = (0, 0, cg_hydrostatic)  # The rotation_center is used for the definition of the rotation dofs
 
+# Visualize the body
 body.show_matplotlib()
 
 ax = plt.gca()
 ax.view_init(elev=0, azim=-90)
 ax.set_proj_type("ortho")
-
-# Append/overwrite definitions
-cr = cg_hydrostatic
-body.rotation_center = (0, 0, cr)  # The rotation_center is used for the definition of the rotation dofs
-body.name = 'body_1' # Redefine the body name
 
 # If the mass is not specified (as in the examples above), the body is
 # assumed to be in buoyancy equilibrium. It’s mass is the mass of the
@@ -228,8 +236,6 @@ body.add_translation_dof(direction=[0, 0, 1], name='Heave')
 #body.add_rotation_dof(axis=cpt.Axis(point=body.rotation_center, vector=(0, 1, 0)), name="Pitch")
 #body.add_rotation_dof(axis=cpt.Axis(point=body.rotation_center, vector=(0, 0, 1)), name="Yaw")
 
-
-
 # Capytaine (to compare w/ Meshmagick)
 print("Volume:", body.volume)
 print("Center of buoyancy:", body.center_of_buoyancy)
@@ -242,6 +248,7 @@ print("Metacentric parameters:",
     body.longitudinal_metacentric_radius,
     body.transversal_metacentric_height,
     body.longitudinal_metacentric_height)
+
 
 # =============================================================================
 # 5. HYDROSTATIC ANALYSIS
@@ -262,7 +269,7 @@ cb = hydrostatics['center_of_buoyancy']
 
 # Files needed by BEMIO in WEC-Sim
 # 1 - center of gravity and buoyancy
-output_file1 = f"{output_dir}Hydrostatics_{body.name}.dat"
+output_file1 = f"{output_dir}Hydrostatics_{analysis}.dat"
 with open(output_file1, 'w') as f:
     for j in [0, 1, 2]:
         line = f'XF = {cb[j]:7.3f} - XG = {cg[j]:7.3f} \n'
@@ -271,8 +278,15 @@ with open(output_file1, 'w') as f:
     f.write(line)
 
 # 2 - stiffness coefficients
-output_file2 = f"{output_dir}KH_{body.name}.dat"
+output_file2 = f"{output_dir}KH_{analysis}.dat"
 np.savetxt(output_file2, body.hydrostatic_stiffness.data)
+
+# 3 - STL file
+output_file3 = f"{output_dir}{analysis}.stl"
+write_STL(output_file3,
+          mesh_input.vertices,
+          mesh_input.faces
+)
 
 # Hydrostatic summary
 print("\nStiffness Matrix:")
@@ -282,6 +296,7 @@ for row in body.hydrostatic_stiffness:
 print("\nInertia Matrix:")
 for row in body.inertia_matrix:
     print("  ".join(f"{val:10.8f}" for val in row))
+
 
 # =============================================================================
 # 5. HYDRODYNAMIC ANALYSIS
@@ -297,59 +312,47 @@ test_matrix = xr.Dataset(coords={
 dataset = solver.fill_dataset(test_matrix, body, n_jobs=Njobs)
 
 
-x = dataset.omega.data
-#iRow = np.where(dataset.radiating_dof.data == 'heave')[0][0]
-#kCol = np.where(dataset.influenced_dof.data == 'heave')[0][0]
-iRow = np.where(dataset.radiating_dof.data == 'Heave')
-kCol = np.where(dataset.influenced_dof.data == 'Heave')
-
 # =============================================================================
 # 6. PLOTS
 # =============================================================================
 
-def radiation_plots(radiation_type):
-    if radiation_type == 'Added_Mass':
-        label = 'Added Mass Coeffs'
-        unit = 'kg'
-        
-        y_list = [dataset.added_mass.data[:, iRow, kCol].squeeze()]
-        name_list = [dataset.body_name.data]
-                
-    elif radiation_type == 'Damping':
-        label = 'Damping Coeffs'
-        unit = '?'
-    
-        y_list = [dataset.radiation_damping.data[:, iRow, kCol].squeeze()]
-        name_list = [dataset.body_name.data]
-    
-    else:
-        raise ValueError(f"Unknown force type: {radiation_type}")
-    
-    fig, ax = plt.subplots()
-    
-    for y, name in zip(y_list, name_list):
-        ax.plot(x, y, label=name)
-    
-    ax.set_xlabel(r'$\omega$ (rad/s)',fontsize=16)
-    ax.set_ylabel(f'{label} ({unit})',fontsize=16)
-    
-    # Tick-label size
-    ax.tick_params(axis='both', labelsize=14)
-    
-    ax.ticklabel_format(
-        axis='y',
-        style='plain',
-        useOffset=False,
-    )
-    
-    ax.legend(fontsize=14)
-    plt.show()
+radiation_plots(
+    dataset,
+    radiation_type='Damping',
+    dof='Heave',
+)
 
-radiation_plots(radiation_type)        
+radiation_plots(
+    dataset,
+    radiation_type='Added_Mass',
+    dof='Heave',
+)
+
+force_plots(
+    dataset,
+    force_type='Froude_Krylov',
+    dof='Heave',
+    wave_direction=wave_dir,
+)
+
+force_plots(
+    dataset,
+    force_type='Diffraction',
+    dof='Heave',
+    wave_direction=wave_dir,
+)
+
+force_plots(
+    dataset,
+    force_type='Excitation',
+    dof='Heave',
+    wave_direction=wave_dir,
+)
 
 # =============================================================================
 # 7. ANIMATIONS
 # =============================================================================
+# Create full body mesh for animations
 animate_body(solver,full_body,body)
 
 full_body.hydrostatics = hydrostatics
